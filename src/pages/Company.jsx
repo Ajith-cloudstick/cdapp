@@ -65,7 +65,7 @@ export default function Company() {
           Where do you work?
         </h2>
         <p style={{ fontSize: "clamp(14px, 1.1vw, 16px)", color: C.muted, lineHeight: 1.6, marginBottom: 32, animation: "fadeUp .4s ease .12s both" }}>
-          This helps us connect you with people in similar professional circles who understand your world.
+          This helps us connect you with people in similar professional circles who understand your lifestyle.
         </p>
 
         <div style={{ animation: "fadeUp .4s ease .16s both" }}>

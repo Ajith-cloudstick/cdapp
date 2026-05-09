@@ -29,8 +29,8 @@ export default function Done() {
         setCountErr(true);
       }
 
-      // Random interval between 40 and 70 seconds
-      const delay = Math.floor(Math.random() * (70000 - 40000) + 40000);
+      // Random interval between 5 and 40 seconds
+      const delay = Math.floor(Math.random() * (40000 - 5000) + 5000);
       timer = setTimeout(update, delay);
     };
 
