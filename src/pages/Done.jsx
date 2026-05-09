@@ -23,9 +23,11 @@ export default function Done() {
   );
   // Capture the real backend count from the POST response before any animation.
   const realCountRef = useRef(spot);
+  // For the registration flow we start at 0 so the count animates up to
+  // (target - 5); on refresh/direct landing we show the exact value immediately.
   const [displayValue, setDisplayValue] = useState(() => {
     if (spot == null) return null;
-    return isFromRegistration.current && spot > 5 ? spot - 5 : spot;
+    return isFromRegistration.current && spot > 5 ? 0 : spot;
   });
   const animSpot = useCountUp(displayValue ?? 0, 350);
 
@@ -71,12 +73,11 @@ export default function Done() {
       const start = target > 5 ? target - 5 : 0;
       setDisplayValue(start);
 
-      // Uneven increments feel organic — like other users joining live.
-      // e.g. target 16: 11 → 13 → 15 → 16 over ~2.4s after a 600ms beat.
+      // Staged increments simulate live joins: pause, +3, pause, +2.
+      // e.g. target 321: 316 → (3s) → 319 → (2s) → 321.
       const steps = [
-        { at: 600,  delta: 2 },
-        { at: 1500, delta: 2 },
-        { at: 2400, delta: 1 },
+        { at: 3000, delta: 3 },
+        { at: 5000, delta: 2 },
       ];
       let acc = start;
       steps.forEach(({ at, delta }) => {
@@ -86,12 +87,12 @@ export default function Done() {
           setDisplayValue(acc);
         }, at));
       });
-      // Land exactly on target, then connect WS for live updates.
+      // After the final increment, snap exactly to target and start WS.
       incrementTimers.push(setTimeout(() => {
         if (!isMounted) return;
         setDisplayValue(target);
         connectWS();
-      }, 2800));
+      }, 5500));
     } else {
       // Refresh or direct landing — show real count immediately via WS.
       connectWS();
