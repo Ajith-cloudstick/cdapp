@@ -1,17 +1,30 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { C, F } from "../utils/tokens";
 import { Label } from "../components/ui";
-import { Heart, CoffeeCup, FloatingHearts } from "../components/Heart";
+import { Heart, FloatingHearts } from "../components/Heart";
+import heroPng from "../assets/hero.png";
 import { I } from "../components/icons";
 import { useApp } from "../context/AppContext";
 import { useCountUp } from "../hooks/useCountUp";
+import { fetchCount } from "../utils/api";
 
 const PX = "clamp(24px, 5vw, 80px)";
 
 export default function Done() {
   const navigate = useNavigate();
-  const { name, spot } = useApp();
-  const animSpot = useCountUp(spot, 1600);
+  const { name, spot, setSpot } = useApp();
+  const [countErr, setCountErr] = useState(null);
+  const animSpot = useCountUp(spot ?? 0, 1600);
+
+  useEffect(() => {
+    fetchCount()
+      .then(data => {
+        const count = data?.count ?? data?.total ?? null;
+        if (count != null) setSpot(count);
+      })
+      .catch(() => setCountErr(true));
+  }, []);
 
   return (
     <div style={{ minHeight: "100svh", background: C.bg, fontFamily: F, position: "relative" }}>
@@ -22,16 +35,16 @@ export default function Done() {
         {/* Header */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "clamp(32px, 4vw, 56px)" }}>
           <div>
-            <p style={{ fontSize: "clamp(20px, 2.5vw, 32px)", fontWeight: 800, color: C.text, letterSpacing: "-.03em", lineHeight: 1.1 }}>coffee</p>
-            <p style={{ fontSize: "clamp(20px, 2.5vw, 32px)", fontWeight: 800, color: C.text, letterSpacing: "-.03em", lineHeight: 1.1 }}>after work</p>
+            <p style={{ fontSize: "clamp(25px, 2.5vw, 35px)", fontWeight: 800, color: C.text, letterSpacing: "-.03em", lineHeight: 1.1 }}>Coffee</p>
+            <p style={{ fontSize: "clamp(25px, 2.5vw, 35px)", fontWeight: 800, color: C.text, letterSpacing: "-.03em", lineHeight: 1.1 }}>after <span style={{ color: C.red }}>work</span></p>
           </div>
-          <div style={{ width: 40, height: 40, borderRadius: "50%", background: C.card, display: "flex", alignItems: "center", justifyContent: "center", animation: "popIn .5s cubic-bezier(.34,1.56,.64,1) .2s both" }}>
-            <Heart sz={3} gap={1} />
+          <div style={{ width: "clamp(20px, 4vw, 56px)", height: "clamp(20px, 4vw, 56px)", borderRadius: "50%", background: C.card, display: "flex", alignItems: "center", justifyContent: "center", animation: "popIn .5s cubic-bezier(.34,1.56,.64,1) .2s both" }}>
+            <Heart sz={2} gap={0.5} />
           </div>
         </div>
 
         {/* Title */}
-        <div style={{ marginBottom: "clamp(28px, 4vw, 48px)", animation: "fadeUp .4s ease .05s both" }}>
+        <div style={{ marginBottom: "clamp(28px, 4vw, 48px)", marginTop: "clamp(80px, 4vw, 48px)", animation: "fadeUp .4s ease .05s both" }}>
           <p style={{ fontSize: "clamp(30px, 5vw, 64px)", fontWeight: 800, color: C.text, letterSpacing: "-.03em", lineHeight: 1.1, marginBottom: 8 }}>You're on the list.</p>
           <p style={{ fontSize: "clamp(14px, 1.2vw, 18px)", color: C.muted }}>Good things take time{name ? `, ${name}` : ""}.</p>
         </div>
@@ -44,11 +57,16 @@ export default function Done() {
             <Label>Your Spot</Label>
             <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
               <div>
-                <p style={{ fontSize: "clamp(56px, 8vw, 96px)", fontWeight: 800, color: C.red, lineHeight: 1, letterSpacing: "-.05em" }}>{animSpot.toLocaleString()}</p>
-                <p style={{ fontSize: "clamp(13px, 1vw, 16px)", color: C.muted, marginTop: 8 }}>people ahead of you</p>
+                {spot == null && !countErr
+                  ? <div style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, color: C.muted, lineHeight: 1, letterSpacing: "-.03em", paddingBottom: 8 }}>—</div>
+                  : <p style={{ fontSize: "clamp(56px, 8vw, 96px)", fontWeight: 800, color: C.red, lineHeight: 1, letterSpacing: "-.05em" }}>{animSpot.toLocaleString()}</p>
+                }
+                <p style={{ fontSize: "clamp(13px, 1vw, 16px)", color: C.muted, marginTop: 8 }}>
+                  {countErr ? "Couldn't load count — check back soon." : "people on the waitlist"}
+                </p>
               </div>
-              <div style={{ opacity: .6, marginBottom: 4 }}>
-                <CoffeeCup sz={8} gap={1.5} />
+              <div style={{ marginBottom: 4 }}>
+                <img src={heroPng} alt="coffee cup" style={{ width: "clamp(80px, 10vw, 140px)", height: "auto", display: "block" }} />
               </div>
             </div>
           </div>
@@ -82,7 +100,7 @@ export default function Done() {
               <Label>Updates</Label>
               <p style={{ fontSize: "clamp(14px, 1.2vw, 17px)", color: C.text, lineHeight: 1.6, marginTop: 4 }}>We're building something worth the wait.</p>
             </div>
-            <div style={{ marginLeft: 16, flexShrink: 0 }}>{I.arrow}</div>
+            <div   style={{ width: 44, height: 44, borderRadius: "50%", background: C.white, border: `1px solid ${C.border}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "transform .15s", flexShrink: 0, marginLeft: 16 }}>{I.arrow}</div>
           </div>
 
         </div>

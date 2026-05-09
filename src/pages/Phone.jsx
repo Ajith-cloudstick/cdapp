@@ -1,23 +1,27 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { C, F } from "../utils/tokens";
-import { FormPage, PrimaryBtn, BackBtn, Field, FieldLabel, ErrorBox, ProgressDots } from "../components/ui";
+import { FormPage, PrimaryBtn, BackBtn, FieldLabel, ErrorBox, ProgressDots } from "../components/ui";
 import { useApp } from "../context/AppContext";
-import { fmtPhone } from "../utils/phone";
+import { COUNTRIES, cleanPhone, validatePhone } from "../utils/phone";
 import { I } from "../components/icons";
+
+const DEFAULT_COUNTRY = COUNTRIES[0]; // India
 
 export default function Phone() {
   const navigate = useNavigate();
-  const { phone, setPhone } = useApp();
+  const { phone, setPhone, setDialCode } = useApp();
 
+  const [country,  setCountry]  = useState(DEFAULT_COUNTRY);
   const [phoneErr, setPhoneErr] = useState(null);
   const [shakeEl,  setShakeEl]  = useState(null);
+  const [focused,  setFocused]  = useState(false);
 
   function shake(el) { setShakeEl(el); setTimeout(() => setShakeEl(null), 380); }
 
   function submit() {
-    const d = phone.replace(/\D/g, "");
-    if (phone.trim() && d.length < 7) { setPhoneErr("Enter a valid phone number."); shake("phone"); return; }
+    const err = validatePhone(country.dial, phone);
+    if (phone.trim() && err) { setPhoneErr(err); shake("phone"); return; }
     navigate("/company");
   }
 
@@ -51,16 +55,98 @@ export default function Phone() {
         <div style={{ animation: "fadeUp .4s ease .16s both" }}>
           <FieldLabel>Phone number</FieldLabel>
           <div className={shakeEl === "phone" ? "shake" : ""}>
-            <Field value={phone} onChange={v => { setPhone(fmtPhone(v)); setPhoneErr(null); }} placeholder="(555) 000-0000" type="tel" onKeyDown={e => e.key === "Enter" && submit()} />
+            <PhoneInput
+              country={country}
+              onCountryChange={c => { setCountry(c); setDialCode(c.dial); setPhoneErr(null); }}
+              value={phone}
+              onChange={v => { setPhone(cleanPhone(v)); setPhoneErr(null); }}
+              focused={focused}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              onSubmit={submit}
+            />
           </div>
           {phoneErr && <ErrorBox msg={phoneErr} />}
         </div>
 
         <div style={{ marginTop: 24, padding: "14px 16px", background: C.card, borderRadius: 12, animation: "fadeUp .4s ease .2s both" }}>
-          <p style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.65 }}>📱 We'll text you when it's your turn. That's it.</p>
+          <p style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.65 }}>📱 We'll reach you when it's your turn. That's it.</p>
         </div>
-
       </div>
     </FormPage>
+  );
+}
+
+function PhoneInput({ country, onCountryChange, value, onChange, focused, onFocus, onBlur, onSubmit }) {
+  return (
+    <div style={{
+      display: "flex",
+      height: 52,
+      border: `1.5px solid ${focused ? C.red : C.border}`,
+      borderRadius: 10,
+      background: C.white,
+      overflow: "hidden",
+      transition: "border-color .18s",
+    }}>
+      {/* Country selector */}
+      <div style={{ position: "relative", flexShrink: 0 }}>
+        <div style={{
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          padding: "0 10px 0 14px",
+          borderRight: `1.5px solid ${focused ? "rgba(154,0,2,.2)" : C.border}`,
+          cursor: "pointer",
+          userSelect: "none",
+          transition: "border-color .18s",
+        }}>
+          <span style={{ fontSize: 20, lineHeight: 1 }}>{country.flag}</span>
+          <span style={{ fontSize: 14, fontWeight: 600, color: C.text, fontFamily: F, letterSpacing: "-.01em" }}>+{country.dial}</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={C.muted} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: .7 }}>
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </div>
+        {/* Native select overlaid for accessibility + mobile native picker */}
+        <select
+          value={country.code}
+          onChange={e => onCountryChange(COUNTRIES.find(c => c.code === e.target.value))}
+          style={{
+            position: "absolute", inset: 0,
+            opacity: 0, cursor: "pointer",
+            width: "100%", height: "100%",
+            fontSize: 16,
+          }}
+        >
+          {COUNTRIES.map(c => (
+            <option key={c.code} value={c.code}>{c.flag} {c.name} (+{c.dial})</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Number input */}
+      <input
+        className="field-bare"
+        type="tel"
+        inputMode="numeric"
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onKeyDown={e => e.key === "Enter" && onSubmit()}
+        placeholder="98765 43210"
+        style={{
+          flex: 1,
+          border: "none",
+          outline: "none",
+          background: "transparent",
+          fontFamily: F,
+          fontSize: 15,
+          color: C.text,
+          padding: "0 16px",
+          letterSpacing: ".02em",
+        }}
+      />
+    </div>
   );
 }

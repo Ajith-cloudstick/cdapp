@@ -15,7 +15,7 @@ export default function How() {
   return (
     <Page
       header={<div style={{ paddingBottom: 16 }}><BackBtn onClick={() => navigate(-1)} /></div>}
-      action={<PrimaryBtn onClick={() => navigate("/ready")}>Join the waitlist</PrimaryBtn>}
+      action={<PrimaryBtn onClick={() => navigate("/done")}>Okay, got it</PrimaryBtn>}
     >
       <div style={{ padding: "clamp(24px, 4vw, 64px) 0 clamp(32px, 5vw, 80px)" }}>
 

@@ -4,21 +4,42 @@ import { C, F } from "../utils/tokens";
 import { FormPage, PrimaryBtn, BackBtn, Field, FieldLabel, ErrorBox, ProgressDots } from "../components/ui";
 import { useApp } from "../context/AppContext";
 import { I } from "../components/icons";
+import { submitPromo } from "../utils/api";
 
 export default function Company() {
   const navigate = useNavigate();
-  const { company, setCompany, setSpot } = useApp();
+  const { name, email, company, setCompany, setSpot } = useApp();
 
   const [compErr, setCompErr] = useState(null);
+  const [apiErr,  setApiErr]  = useState(null);
+  const [loading, setLoading] = useState(false);
   const [shakeEl, setShakeEl] = useState(null);
 
   function shake(el) { setShakeEl(el); setTimeout(() => setShakeEl(null), 380); }
 
-  function submit() {
+  async function submit() {
     setCompErr(null);
+    setApiErr(null);
     if (!company.trim()) { setCompErr("Please enter your company name."); shake("company"); return; }
-    setSpot(Math.floor(Math.random() * 1400 + 600));
-    navigate("/done");
+
+    setLoading(true);
+    try {
+      const fullPhone = phone ? `+${dialCode}${phone}` : undefined;
+      const data = await submitPromo({ 
+        name, 
+        email, 
+        company: company.trim(),
+        phone_number: fullPhone
+      });
+      const count = data?.count ?? data?.spot ?? null;
+      setSpot(count);
+      navigate("/done");
+    } catch (err) {
+      setApiErr(err.message);
+      shake("api");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -29,7 +50,7 @@ export default function Company() {
           <ProgressDots current={2} total={3} />
         </div>
       }
-      action={<PrimaryBtn onClick={submit}>Reserve my spot →</PrimaryBtn>}
+      action={<PrimaryBtn onClick={submit} disabled={loading}>{loading ? "Reserving…" : "Reserve my spot →"}</PrimaryBtn>}
     >
       <div style={{ maxWidth: 480, margin: "0 auto", padding: "clamp(24px, 4vw, 60px) 0 clamp(32px, 5vw, 80px)" }}>
         <div style={{ width: 52, height: 52, borderRadius: "50%", background: C.card, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24, animation: "popIn .45s cubic-bezier(.34,1.56,.64,1) both" }}>
@@ -50,6 +71,12 @@ export default function Company() {
           </div>
           {compErr && <ErrorBox msg={compErr} />}
         </div>
+
+        {apiErr && (
+          <div className={shakeEl === "api" ? "shake" : ""} style={{ marginTop: 16 }}>
+            <ErrorBox msg={apiErr} />
+          </div>
+        )}
 
         <div style={{ marginTop: 28, animation: "fadeUp .4s ease .2s both" }}>
           <p style={{ fontSize: "clamp(13px, 1.1vw, 15px)", color: C.muted, lineHeight: 1.8 }}>
