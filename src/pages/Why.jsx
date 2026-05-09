@@ -10,8 +10,8 @@ const FEATURES = [
   },
   {
     icon: "shield",
-    title: "Zero fake profile",
-    desc: "Every profile is verified to ensure you connect with real, genuine people.",
+    title: "Zero fake profiles",
+    desc: "Every profile is verified so you connect with real people.",
   },
   {
     icon: "hands-heart",
@@ -39,7 +39,7 @@ export default function Why() {
   return (
     <Page
       header={<div style={{ paddingBottom: 16 }}><BackBtn onClick={() => navigate(-1)} /></div>}
-      action={<PrimaryBtn onClick={() => navigate("/how")}>Okay, got it</PrimaryBtn>}
+      action={<PrimaryBtn onClick={() => navigate("/how")}>Let's go</PrimaryBtn>}
     >
       <div style={{ padding: "clamp(24px, 4vw, 64px) 0 clamp(32px, 5vw, 80px)" }}>
 
@@ -49,7 +49,8 @@ export default function Why() {
         </h2>
         <RedLine />
         <p style={{ fontSize: "clamp(14px, 1.2vw, 18px)", color: "rgba(27,23,23,.65)", lineHeight: 1.75, marginBottom: "clamp(32px, 5vw, 64px)", maxWidth: 640, animation: "fadeUp .4s ease .06s both" }}>
-          We believe real connections happen in real life. Coffee after work is for busy professionals who want to meet someone meaningful-over coffee, after work.</p>
+        We believe real connections happen in real life.
+Coffee After Work is for professionals who want to meet someone meaningful over coffee, after work.</p>
 
         {/* Feature list — icon left, text right */}
         <div style={{ display: "flex", flexDirection: "column", gap: "clamp(24px, 4vw, 36px)" }}>

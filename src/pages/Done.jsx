@@ -163,10 +163,17 @@ export default function Done() {
               <p style={{ fontSize: "clamp(14px, 1.2vw, 17px)", color: C.text, lineHeight: 1.6, marginTop: 4 }}>Invite friends. Unlock exclusive goodies and rewards.</p>
             </div>
             <button
-              onClick={() => navigator.share?.({ title: "Coffee After Work", url: referralId ? `https://www.coffeeafterwork.com?ref=${referralId}` : 'https://www.coffeeafterwork.com' })}
+              onClick={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.blur();
+                navigator.share?.({ title: "Coffee After Work", url: referralId ? `https://www.coffeeafterwork.com?ref=${referralId}` : 'https://www.coffeeafterwork.com' });
+              }}
               style={{ width: 44, height: 44, borderRadius: "50%", background: C.white, border: `1px solid ${C.border}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "transform .15s", flexShrink: 0, marginLeft: 16 }}
-              onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.1) rotate(-8deg)")}
-              onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+              onPointerEnter={e => { if (e.pointerType === "mouse") e.currentTarget.style.transform = "scale(1.1) rotate(-8deg)"; }}
+              onPointerLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+              onPointerCancel={e => (e.currentTarget.style.transform = "scale(1)")}
+              onPointerUp={e => { if (e.pointerType !== "mouse") e.currentTarget.style.transform = "scale(1)"; }}
+              onBlur={e => (e.currentTarget.style.transform = "scale(1)")}
             >
               {I.share}
             </button>
