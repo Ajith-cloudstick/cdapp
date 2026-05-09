@@ -136,10 +136,9 @@ export default function Done() {
 
             <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
               <div>
-                {spot == null && !countErr
-                  ? <div style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, color: C.muted, lineHeight: 1, letterSpacing: "-.03em", paddingBottom: 8 }}>—</div>
-                  : <p style={{ fontSize: "clamp(56px, 8vw, 96px)", fontWeight: 800, color: C.red, lineHeight: 1, letterSpacing: "-.05em" }}>{animSpot.toLocaleString()}</p>
-                }
+                <p style={{ fontSize: "clamp(56px, 8vw, 96px)", fontWeight: 800, color: C.red, lineHeight: 1, letterSpacing: "-.05em" }}>
+                  {spot == null && !countErr ? "000" : animSpot.toLocaleString()}
+                </p>
                 <p style={{ fontSize: "clamp(13px, 1vw, 16px)", color: C.text, marginTop: 8, lineHeight: 1.5 }}>
                   {countErr
                     ? "Couldn't load count. Please refresh."

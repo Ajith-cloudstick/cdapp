@@ -42,3 +42,7 @@ export async function listPromo({ page = 1, page_size = 50 } = {}) {
   return api.get("/list", { params: { page, page_size } });
 }
 
+export async function getCount() {
+  return api.get("/count");
+}
+

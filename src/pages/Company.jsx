@@ -4,7 +4,7 @@ import { C, F } from "../utils/tokens";
 import { FormPage, PrimaryBtn, BackBtn, Field, FieldLabel, ErrorBox, ProgressDots } from "../components/ui";
 import { useApp } from "../context/AppContext";
 import { I } from "../components/icons";
-import { submitPromo } from "../utils/api";
+import { submitPromo, getCount } from "../utils/api";
 
 export default function Company() {
   const navigate = useNavigate();
@@ -36,8 +36,18 @@ export default function Company() {
       // Clean up the referral ID now that it's been consumed
       sessionStorage.removeItem("caw_referred_by");
       localStorage.removeItem("caw_referred_by");
-      const count = data?.count ?? data?.spot ?? null;
+      let count = data?.count ?? data?.spot ?? null;
       const refId = data?.referral_id ?? null;
+
+      // Fallback: backend's POST may not return the count.
+      // Fetch it once so the Done page has a real number before WS connects.
+      if (count == null) {
+        try {
+          const c = await getCount();
+          count = c?.count ?? c?.total ?? null;
+        } catch { /* WS will populate it later */ }
+      }
+
       setSpot(count);
       if (refId) setReferralId(refId);
       
