@@ -24,7 +24,7 @@ api.interceptors.response.use(
     }
     const data = error.response.data;
     const msg =
-      data?.message || data?.error || `Server error (${error.response.status})`;
+      data?.detail || data?.message || data?.error || `Server error (${error.response.status})`;
     const err = new Error(msg);
     err.status = error.response.status;
     err.data = data;
@@ -32,10 +32,9 @@ api.interceptors.response.use(
   }
 );
 
-export async function submitPromo({ name, email, company, phone_number }) {
-  return api.post("/add", { name, email, company, phone_number });
+export async function submitPromo({ name, email, company, phone_number, referred_by }) {
+  const body = { name, email, company, phone_number };
+  if (referred_by) body.referred_by = referred_by;
+  return api.post("/add", body);
 }
 
-export async function fetchCount() {
-  return api.get("/count");
-}

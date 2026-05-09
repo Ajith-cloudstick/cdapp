@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
 import { AppProvider, useApp } from "./context/AppContext";
 import { injectGlobalStyles } from "./utils/globalStyles";
 
@@ -13,10 +14,24 @@ import Done    from "./pages/Done";
 
 injectGlobalStyles();
 
+function ReferralCapture() {
+  const [params] = useSearchParams();
+  useEffect(() => {
+    const ref = params.get("ref");
+    if (ref) {
+      sessionStorage.setItem("caw_referred_by", ref);
+      localStorage.setItem("caw_referred_by", ref);
+    }
+  }, [params]);
+  return null;
+}
+
 function AppRoutes() {
   const { hasJoined } = useApp();
 
   return (
+    <>
+    <ReferralCapture />
     <Routes>
       {/* If already joined, most pages redirect to /done */}
       <Route 
@@ -51,6 +66,7 @@ function AppRoutes() {
 
       <Route path="*" element={<Navigate to={hasJoined ? "/done" : "/"} replace />} />
     </Routes>
+    </>
   );
 }
 

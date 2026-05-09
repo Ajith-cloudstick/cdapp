@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 
 export function useCountUp(target, ms=1600) {
-  const [n, setN] = useState(0);
-  const currentRef = useRef(0);
+  const [n, setN] = useState(target ?? 0);
+  const currentRef = useRef(target ?? 0);
 
   useEffect(() => {
     if (target == null) return;

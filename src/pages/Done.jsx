@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { C, F } from "../utils/tokens";
 import { Label } from "../components/ui";
 import { Heart, FloatingHearts } from "../components/Heart";
@@ -7,36 +7,102 @@ import heroPng from "../assets/hero.png";
 import { I } from "../components/icons";
 import { useApp } from "../context/AppContext";
 import { useCountUp } from "../hooks/useCountUp";
-import { fetchCount } from "../utils/api";
 
 const PX = "clamp(24px, 5vw, 80px)";
 
 export default function Done() {
   const navigate = useNavigate();
-  const { name, spot, setSpot } = useApp();
+  const location = useLocation();
+  const { name, spot, setSpot, referralId } = useApp();
   const [countErr, setCountErr] = useState(null);
-  const animSpot = useCountUp(spot ?? 0, 1600);
+
+  // sessionStorage is the source of truth — location.state can be lost in the
+  // redirect chain triggered by markAsJoined. Read once on mount.
+  const isFromRegistration = useRef(
+    location.state?.fromRegistration || sessionStorage.getItem("caw_just_registered") === "1"
+  );
+  // Capture the real backend count from the POST response before any animation.
+  const realCountRef = useRef(spot);
+  const [displayValue, setDisplayValue] = useState(() => {
+    if (spot == null) return null;
+    return isFromRegistration.current && spot > 5 ? spot - 5 : spot;
+  });
+  const animSpot = useCountUp(displayValue ?? 0, 350);
 
   useEffect(() => {
-    let timer;
+    let ws;
+    let reconnectTimer;
+    const incrementTimers = [];
+    let isMounted = true;
+    let firstMessage = true;
 
-    const update = async () => {
-      try {
-        const data = await fetchCount();
-        const count = data?.count ?? data?.total ?? null;
-        if (count != null) setSpot(count);
-      } catch (err) {
-        setCountErr(true);
-      }
+    const connectWS = () => {
+      ws = new WebSocket("wss://coffeedate.vandana.cloud/api/v1/promo/ws/count");
 
-      // Random interval between 5 and 40 seconds
-      const delay = Math.floor(Math.random() * (40000 - 5000) + 5000);
-      timer = setTimeout(update, delay);
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          const count = data?.count ?? data?.total ?? null;
+          if (count != null && isMounted) {
+            if (firstMessage) {
+              firstMessage = false;
+              setSpot(count);
+            }
+            setDisplayValue(count);
+            setCountErr(null);
+          }
+        } catch { }
+      };
+
+      ws.onerror = () => { if (isMounted) setCountErr(true); };
+
+      ws.onclose = () => {
+        if (isMounted) reconnectTimer = setTimeout(connectWS, 5000);
+      };
     };
 
-    update(); // Initial call
+    if (isFromRegistration.current && realCountRef.current != null) {
+      // Consume the one-time flag so a refresh shows the exact backend count.
+      sessionStorage.removeItem("caw_just_registered");
 
-    return () => clearTimeout(timer);
+      navigator.vibrate?.([60, 40, 120]);
+
+      const target = realCountRef.current;
+      const start = target > 5 ? target - 5 : 0;
+      setDisplayValue(start);
+
+      // Uneven increments feel organic — like other users joining live.
+      // e.g. target 16: 11 → 13 → 15 → 16 over ~2.4s after a 600ms beat.
+      const steps = [
+        { at: 600,  delta: 2 },
+        { at: 1500, delta: 2 },
+        { at: 2400, delta: 1 },
+      ];
+      let acc = start;
+      steps.forEach(({ at, delta }) => {
+        incrementTimers.push(setTimeout(() => {
+          if (!isMounted) return;
+          acc = Math.min(acc + delta, target);
+          setDisplayValue(acc);
+        }, at));
+      });
+      // Land exactly on target, then connect WS for live updates.
+      incrementTimers.push(setTimeout(() => {
+        if (!isMounted) return;
+        setDisplayValue(target);
+        connectWS();
+      }, 2800));
+    } else {
+      // Refresh or direct landing — show real count immediately via WS.
+      connectWS();
+    }
+
+    return () => {
+      isMounted = false;
+      clearTimeout(reconnectTimer);
+      incrementTimers.forEach(clearTimeout);
+      ws?.close();
+    };
   }, [setSpot]);
 
   return (
@@ -51,13 +117,13 @@ export default function Done() {
             <p style={{ fontSize: "clamp(25px, 2.5vw, 35px)", fontWeight: 800, color: C.text, letterSpacing: "-.03em", lineHeight: 1.1 }}>Coffee</p>
             <p style={{ fontSize: "clamp(25px, 2.5vw, 35px)", fontWeight: 800, color: C.text, letterSpacing: "-.03em", lineHeight: 1.1 }}>after <span style={{ color: C.red }}>work</span></p>
           </div>
-          <div style={{ width: "clamp(20px, 4vw, 56px)", height: "clamp(20px, 4vw, 56px)", borderRadius: "50%", background: C.card, display: "flex", alignItems: "center", justifyContent: "center", animation: "popIn .5s cubic-bezier(.34,1.56,.64,1) .2s both" }}>
+          {/* <div style={{ width: "clamp(20px, 4vw, 56px)", height: "clamp(20px, 4vw, 56px)", borderRadius: "50%", background: C.card, display: "flex", alignItems: "center", justifyContent: "center", animation: "popIn .5s cubic-bezier(.34,1.56,.64,1) .2s both" }}>
             <Heart sz={2} gap={0.5} />
-          </div>
+          </div> */}
         </div>
 
         {/* Title */}
-        <div style={{ marginBottom: "clamp(28px, 4vw, 48px)", marginTop: "clamp(80px, 4vw, 48px)", animation: "fadeUp .4s ease .05s both" }}>
+        <div style={{ marginBottom: "clamp(28px, 4vw, 48px)", marginTop: "clamp(50px, 4vw, 48px)", animation: "fadeUp .4s ease .05s both" }}>
           <p style={{ fontSize: "clamp(30px, 5vw, 64px)", fontWeight: 800, color: C.text, letterSpacing: "-.03em", lineHeight: 1.1, marginBottom: 8 }}>You're on the list.</p>
           <p style={{ fontSize: "clamp(14px, 1.2vw, 18px)", color: C.muted }}>Good things take time{name ? `, ${name}` : ""}.</p>
         </div>
@@ -97,7 +163,7 @@ export default function Done() {
               <p style={{ fontSize: "clamp(14px, 1.2vw, 17px)", color: C.text, lineHeight: 1.6, marginTop: 4 }}>Invite friends. Unlock exclusive goodies and rewards.</p>
             </div>
             <button
-              onClick={() => navigator.share?.({ title: "Coffee After Work", url: 'https://www.coffeeafterwork.com' })}
+              onClick={() => navigator.share?.({ title: "Coffee After Work", url: referralId ? `https://www.coffeeafterwork.com?ref=${referralId}` : 'https://www.coffeeafterwork.com' })}
               style={{ width: 44, height: 44, borderRadius: "50%", background: C.white, border: `1px solid ${C.border}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "transform .15s", flexShrink: 0, marginLeft: 16 }}
               onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.1) rotate(-8deg)")}
               onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}

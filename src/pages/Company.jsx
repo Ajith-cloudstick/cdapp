@@ -8,7 +8,7 @@ import { submitPromo } from "../utils/api";
 
 export default function Company() {
   const navigate = useNavigate();
-  const { name, email, phone, dialCode, company, setCompany, setSpot, markAsJoined } = useApp();
+  const { name, email, phone, dialCode, company, setCompany, setSpot, setReferralId, markAsJoined } = useApp();
 
   const [compErr, setCompErr] = useState(null);
   const [apiErr,  setApiErr]  = useState(null);
@@ -25,20 +25,35 @@ export default function Company() {
     setLoading(true);
     try {
       const fullPhone = phone ? `+${dialCode}${phone}` : undefined;
-      const data = await submitPromo({ 
-        name, 
-        email, 
+      const referredBy = sessionStorage.getItem("caw_referred_by") || localStorage.getItem("caw_referred_by") || undefined;
+      const data = await submitPromo({
+        name,
+        email,
         company: company.trim(),
-        phone_number: fullPhone
+        phone_number: fullPhone,
+        referred_by: referredBy,
       });
+      // Clean up the referral ID now that it's been consumed
+      sessionStorage.removeItem("caw_referred_by");
+      localStorage.removeItem("caw_referred_by");
       const count = data?.count ?? data?.spot ?? null;
+      const refId = data?.referral_id ?? null;
       setSpot(count);
+      if (refId) setReferralId(refId);
       
       // Mark as joined in local storage
       markAsJoined(true);
-      
-      navigate("/done");
+
+      // One-time flag for Done page to play the pending-count animation.
+      // Using sessionStorage because location.state can be lost in redirect chains.
+      sessionStorage.setItem("caw_just_registered", "1");
+
+      navigate("/done", { state: { fromRegistration: true } });
     } catch (err) {
+      if (/email already registered/i.test(err.message)) {
+        navigate("/signup", { state: { emailErr: err.message } });
+        return;
+      }
       setApiErr(err.message);
       shake("api");
     } finally {

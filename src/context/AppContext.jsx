@@ -13,6 +13,11 @@ export function AppProvider({ children }) {
   const [dialCode, setDialCode] = useState("91");
   const [company,  setCompany]  = useState("");
   const [spot,     setSpot]     = useState(null);
+  const [referralId, setReferralIdState] = useState(() => localStorage.getItem("caw_referral_id") || null);
+  const setReferralId = (val) => {
+    setReferralIdState(val);
+    if (val) localStorage.setItem("caw_referral_id", val);
+  };
   
   // Auth state
   const [hasJoined, setHasJoined] = useState(() => {
@@ -32,6 +37,7 @@ export function AppProvider({ children }) {
       dialCode, setDialCode, 
       company, setCompany, 
       spot, setSpot,
+      referralId, setReferralId,
       hasJoined, markAsJoined
     }}>
       {children}

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { C, F } from "../utils/tokens";
 import { FormPage, PrimaryBtn, BackBtn, Field, FieldLabel, ErrorBox, ProgressDots } from "../components/ui";
 import { useApp } from "../context/AppContext";
@@ -7,12 +7,25 @@ import { validateEmail } from "../utils/email";
 
 export default function Signup() {
   const navigate = useNavigate();
-  const { name, setName, email, setEmail } = useApp();
+  const location = useLocation();
+  const { name, setName, email, setEmail, setSpot } = useApp();
 
-  const [nameErr, setNameErr] = useState(null);
-  const [emailErr, setEmailErr] = useState(null);
+  useEffect(() => {
+    setSpot(null);
+  }, [setSpot]);
+
+  const [nameErr,  setNameErr]  = useState(null);
+  const [emailErr, setEmailErr] = useState(
+    location.state?.emailErr ? { msg: location.state.emailErr } : null
+  );
+  const [shakeEl,  setShakeEl]  = useState(location.state?.emailErr ? "email" : null);
+
+  useEffect(() => {
+    if (location.state?.emailErr) {
+      setTimeout(() => setShakeEl(null), 380);
+    }
+  }, []);
   const [loading, setLoading] = useState(false);
-  const [shakeEl, setShakeEl] = useState(null);
 
   function shake(el) { setShakeEl(el); setTimeout(() => setShakeEl(null), 380); }
 
