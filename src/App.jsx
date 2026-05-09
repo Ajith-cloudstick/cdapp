@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AppProvider } from "./context/AppContext";
+import { AppProvider, useApp } from "./context/AppContext";
 import { injectGlobalStyles } from "./utils/globalStyles";
 
 import Splash  from "./pages/Splash";
@@ -13,21 +13,52 @@ import Done    from "./pages/Done";
 
 injectGlobalStyles();
 
+function AppRoutes() {
+  const { hasJoined } = useApp();
+
+  return (
+    <Routes>
+      {/* If already joined, most pages redirect to /done */}
+      <Route 
+        path="/" 
+        element={hasJoined ? <Navigate to="/done" replace /> : <Splash />} 
+      />
+      <Route 
+        path="/signup" 
+        element={hasJoined ? <Navigate to="/done" replace /> : <Signup />} 
+      />
+      <Route 
+        path="/phone" 
+        element={hasJoined ? <Navigate to="/done" replace /> : <Phone />} 
+      />
+      <Route 
+        path="/company" 
+        element={hasJoined ? <Navigate to="/done" replace /> : <Company />} 
+      />
+      
+      {/* Info pages can be viewed regardless, or maybe not? 
+          Usually info pages are fine. Let's keep them open. */}
+      <Route path="/why"     element={<Why />} />
+      <Route path="/how"     element={<How />} />
+      <Route path="/ready"   element={<Ready />} />
+
+      {/* Done page: only accessible if joined. 
+          If not joined, redirect to home. */}
+      <Route 
+        path="/done" 
+        element={hasJoined ? <Done /> : <Navigate to="/" replace />} 
+      />
+
+      <Route path="*" element={<Navigate to={hasJoined ? "/done" : "/"} replace />} />
+    </Routes>
+  );
+}
+
 export default function App() {
   return (
     <AppProvider>
       <BrowserRouter>
-        <Routes>
-            <Route path="/"        element={<Splash />} />
-            <Route path="/why"     element={<Why />} />
-            <Route path="/how"     element={<How />} />
-            <Route path="/ready"   element={<Ready />} />
-            <Route path="/signup"  element={<Signup />} />
-            <Route path="/phone"   element={<Phone />} />
-            <Route path="/company" element={<Company />} />
-            <Route path="/done"    element={<Done />} />
-            <Route path="*"        element={<Navigate to="/" replace />} />
-          </Routes>
+        <AppRoutes />
       </BrowserRouter>
     </AppProvider>
   );

@@ -18,13 +18,26 @@ export default function Done() {
   const animSpot = useCountUp(spot ?? 0, 1600);
 
   useEffect(() => {
-    fetchCount()
-      .then(data => {
+    let timer;
+
+    const update = async () => {
+      try {
+        const data = await fetchCount();
         const count = data?.count ?? data?.total ?? null;
         if (count != null) setSpot(count);
-      })
-      .catch(() => setCountErr(true));
-  }, []);
+      } catch (err) {
+        setCountErr(true);
+      }
+      
+      // Random interval between 40 and 70 seconds
+      const delay = Math.floor(Math.random() * (70000 - 40000) + 40000);
+      timer = setTimeout(update, delay);
+    };
+
+    update(); // Initial call
+
+    return () => clearTimeout(timer);
+  }, [setSpot]);
 
   return (
     <div style={{ minHeight: "100svh", background: C.bg, fontFamily: F, position: "relative" }}>
@@ -61,8 +74,11 @@ export default function Done() {
                   ? <div style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, color: C.muted, lineHeight: 1, letterSpacing: "-.03em", paddingBottom: 8 }}>—</div>
                   : <p style={{ fontSize: "clamp(56px, 8vw, 96px)", fontWeight: 800, color: C.red, lineHeight: 1, letterSpacing: "-.05em" }}>{animSpot.toLocaleString()}</p>
                 }
-                <p style={{ fontSize: "clamp(13px, 1vw, 16px)", color: C.muted, marginTop: 8 }}>
-                  {countErr ? "Couldn't load count — check back soon." : "People showed interest — your perfect match may be here already."}
+                <p style={{ fontSize: "clamp(13px, 1vw, 16px)", color: C.muted, marginTop: 8, lineHeight: 1.5 }}>
+                  {countErr 
+                    ? "Couldn't load count. Please refresh." 
+                    : <>People joined. Your match <br /> may be here already.</>
+                  }
                 </p>
               </div>
               <div style={{ marginBottom: 4 }}>

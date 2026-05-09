@@ -8,7 +8,7 @@ import { submitPromo } from "../utils/api";
 
 export default function Company() {
   const navigate = useNavigate();
-  const { name, email, phone, dialCode, company, setCompany, setSpot } = useApp();
+  const { name, email, phone, dialCode, company, setCompany, setSpot, markAsJoined } = useApp();
 
   const [compErr, setCompErr] = useState(null);
   const [apiErr,  setApiErr]  = useState(null);
@@ -33,6 +33,10 @@ export default function Company() {
       });
       const count = data?.count ?? data?.spot ?? null;
       setSpot(count);
+      
+      // Mark as joined in local storage
+      markAsJoined(true);
+      
       navigate("/done");
     } catch (err) {
       setApiErr(err.message);
