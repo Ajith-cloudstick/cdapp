@@ -32,6 +32,18 @@ export default function Done() {
   const animSpot = useCountUp(displayValue ?? 0, 350);
 
   useEffect(() => {
+    const prevBodyOverflow = document.body.style.overflow;
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    window.scrollTo(0, 0);
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevBodyOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+    };
+  }, []);
+
+  useEffect(() => {
     let ws;
     let reconnectTimer;
     const incrementTimers = [];
@@ -107,7 +119,7 @@ export default function Done() {
   }, [setSpot]);
 
   return (
-    <div style={{ minHeight: "100svh", background: C.bg, fontFamily: F, position: "relative" }}>
+    <div style={{ height: "100svh", background: C.bg, fontFamily: F, position: "relative", overflow: "hidden" }}>
       <FloatingHearts />
 
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: `clamp(36px, 5vw, 72px) ${PX}`, position: "relative", zIndex: 1, animation: "slideR .45s cubic-bezier(.16,1,.3,1) both" }}>
