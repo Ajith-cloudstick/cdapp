@@ -1,6 +1,9 @@
 const DISPOSABLE = new Set(["mailinator.com","guerrillamail.com","tempmail.com","throwaway.email","sharklasers.com","guerrillamail.info","spam4.me","trashmail.com","dispostable.com","yopmail.com","maildrop.cc","temp-mail.org","fakeinbox.com","10minutemail.com","mailnull.com","spamgourmet.com","spam.la","discard.email","discardmail.com","getnada.com","mailnesia.com","trashmail.at","trashmail.io","getairmail.com","filzmail.com","moakt.com","mytemp.email","tempr.email","gufum.com","mailtemp.info","temporaryemail.net"]);
 const TYPOS = {"gamil.com":"gmail.com","gmai.com":"gmail.com","gmial.com":"gmail.com","gnail.com":"gmail.com","gmail.co":"gmail.com","gmail.con":"gmail.com","yaho.com":"yahoo.com","yahooo.com":"yahoo.com","yahoo.co":"yahoo.com","yahoo.con":"yahoo.com","hotmial.com":"hotmail.com","hotmai.com":"hotmail.com","hotmail.co":"hotmail.com","hotmail.con":"hotmail.com","outlok.com":"outlook.com","outlook.co":"outlook.com","iclould.com":"icloud.com","icloud.co":"icloud.com"};
 
+// RFC 5321-compatible: allows all standard local-part chars, valid domain labels
+const EMAIL_RE = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/;
+
 export function validateEmail(email) {
   const v = email.trim();
   if (!v) return { ok: false, msg: "Please enter your email address." };
@@ -12,6 +15,7 @@ export function validateEmail(email) {
   if (!domain.includes(".")) return { ok: false, msg: "Email domain looks incomplete." };
   const tld = domain.split(".").pop();
   if (tld.length < 2) return { ok: false, msg: "Invalid email domain." };
+  if (!EMAIL_RE.test(v)) return { ok: false, msg: "Enter a valid email address." };
   const ld = domain.toLowerCase();
   if (DISPOSABLE.has(ld)) return { ok: false, msg: "Please use your real email — no temp addresses." };
   const fix = TYPOS[ld];

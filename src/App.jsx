@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, useSearchParams } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useSearchParams, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { AppProvider, useApp } from "./context/AppContext";
 import { injectGlobalStyles } from "./utils/globalStyles";
@@ -11,6 +11,8 @@ import Signup  from "./pages/Signup";
 import Phone   from "./pages/Phone";
 import Company from "./pages/Company";
 import Done    from "./pages/Done";
+import AdminLogin from "./pages/AdminLogin";
+import AdminUsers from "./pages/AdminUsers";
 
 injectGlobalStyles();
 
@@ -24,6 +26,22 @@ function ReferralCapture() {
     }
   }, [params]);
   return null;
+}
+
+function isAdminAuthed() {
+  try {
+    return (
+      sessionStorage.getItem("caw_admin_auth") === "1" ||
+      localStorage.getItem("caw_admin_auth") === "1"
+    );
+  } catch {
+    return false;
+  }
+}
+
+function RequireAdmin({ children }) {
+  useLocation(); // re-run on navigation
+  return isAdminAuthed() ? children : <Navigate to="/admi/coffe/true" replace />;
 }
 
 function AppRoutes() {
@@ -62,6 +80,13 @@ function AppRoutes() {
       <Route 
         path="/done" 
         element={hasJoined ? <Done /> : <Navigate to="/" replace />} 
+      />
+
+      {/* Admin */}
+      <Route path="/admi/coffe/true" element={<AdminLogin />} />
+      <Route
+        path="/admi/coffe/true/users"
+        element={<RequireAdmin><AdminUsers /></RequireAdmin>}
       />
 
       <Route path="*" element={<Navigate to={hasJoined ? "/done" : "/"} replace />} />
