@@ -8,7 +8,7 @@ import { submitPromo } from "../utils/api";
 
 export default function Company() {
   const navigate = useNavigate();
-  const { name, email, company, setCompany, setSpot } = useApp();
+  const { name, email, phone, dialCode, company, setCompany, setSpot } = useApp();
 
   const [compErr, setCompErr] = useState(null);
   const [apiErr,  setApiErr]  = useState(null);
