@@ -9,10 +9,10 @@ export default function Signup() {
   const navigate = useNavigate();
   const { name, setName, email, setEmail } = useApp();
 
-  const [nameErr,  setNameErr]  = useState(null);
+  const [nameErr, setNameErr] = useState(null);
   const [emailErr, setEmailErr] = useState(null);
-  const [loading,  setLoading]  = useState(false);
-  const [shakeEl,  setShakeEl]  = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [shakeEl, setShakeEl] = useState(null);
 
   function shake(el) { setShakeEl(el); setTimeout(() => setShakeEl(null), 380); }
 
@@ -63,7 +63,7 @@ export default function Signup() {
         </div>
 
         <div style={{ marginTop: 28, padding: "14px 16px", background: C.card, borderRadius: 12, animation: "fadeUp .4s ease .16s both" }}>
-          <p style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.65 }}>🔒 Your info is never shared. We'll only contact you when your spot opens.</p>
+          <p style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.65 }}>🔒 Your info is never shared. We'll only contact you when the app is live.</p>
         </div>
 
       </div>

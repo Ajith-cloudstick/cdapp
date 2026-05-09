@@ -12,16 +12,25 @@ export default function Phone() {
   const navigate = useNavigate();
   const { phone, setPhone, setDialCode } = useApp();
 
-  const [country,  setCountry]  = useState(DEFAULT_COUNTRY);
+  const [country, setCountry] = useState(DEFAULT_COUNTRY);
   const [phoneErr, setPhoneErr] = useState(null);
-  const [shakeEl,  setShakeEl]  = useState(null);
-  const [focused,  setFocused]  = useState(false);
+  const [shakeEl, setShakeEl] = useState(null);
+  const [focused, setFocused] = useState(false);
 
   function shake(el) { setShakeEl(el); setTimeout(() => setShakeEl(null), 380); }
 
   function submit() {
+    if (!phone.trim()) {
+      setPhoneErr("Please enter your phone number.");
+      shake("phone");
+      return;
+    }
     const err = validatePhone(country.dial, phone);
-    if (phone.trim() && err) { setPhoneErr(err); shake("phone"); return; }
+    if (err) {
+      setPhoneErr(err);
+      shake("phone");
+      return;
+    }
     navigate("/company");
   }
 
@@ -36,7 +45,6 @@ export default function Phone() {
       action={
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <PrimaryBtn onClick={submit}>Continue →</PrimaryBtn>
-          <button onClick={() => navigate("/company")} style={{ background: "none", border: "none", color: C.muted, fontFamily: F, fontSize: 13, cursor: "pointer", padding: "6px 0", textAlign: "center" }}>Skip for now</button>
         </div>
       }
     >
@@ -49,7 +57,7 @@ export default function Phone() {
           Your phone number.
         </h2>
         <p style={{ fontSize: "clamp(13px, 1.1vw, 16px)", color: C.muted, lineHeight: 1.65, marginBottom: 32, animation: "fadeUp .4s ease .12s both" }}>
-          So we can reach you when your match is ready — no spam, ever.
+          We'll notify you the moment the app is live.
         </p>
 
         <div style={{ animation: "fadeUp .4s ease .16s both" }}>
@@ -69,9 +77,7 @@ export default function Phone() {
           {phoneErr && <ErrorBox msg={phoneErr} />}
         </div>
 
-        <div style={{ marginTop: 24, padding: "14px 16px", background: C.card, borderRadius: 12, animation: "fadeUp .4s ease .2s both" }}>
-          <p style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.65 }}>📱 We'll reach you when it's your turn. That's it.</p>
-        </div>
+
       </div>
     </FormPage>
   );

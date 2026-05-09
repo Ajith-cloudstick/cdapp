@@ -64,8 +64,8 @@ export default function Company() {
         <h2 style={{ fontSize: "clamp(26px, 3.5vw, 48px)", fontWeight: 800, color: C.text, letterSpacing: "-.03em", lineHeight: 1.1, marginBottom: 8, animation: "fadeUp .4s ease .08s both" }}>
           Where do you work?
         </h2>
-        <p style={{ fontSize: "clamp(13px, 1.1vw, 16px)", color: C.muted, lineHeight: 1.65, marginBottom: 32, animation: "fadeUp .4s ease .12s both" }}>
-          Coffee after work is built for professionals. This helps us find you the right people.
+        <p style={{ fontSize: "clamp(14px, 1.1vw, 16px)", color: C.muted, lineHeight: 1.6, marginBottom: 32, animation: "fadeUp .4s ease .12s both" }}>
+          This helps us connect you with people in similar professional circles who understand your world.
         </p>
 
         <div style={{ animation: "fadeUp .4s ease .16s both" }}>
@@ -81,12 +81,6 @@ export default function Company() {
             <ErrorBox msg={apiErr} />
           </div>
         )}
-
-        <div style={{ marginTop: 28, animation: "fadeUp .4s ease .2s both" }}>
-          <p style={{ fontSize: "clamp(13px, 1.1vw, 15px)", color: C.muted, lineHeight: 1.8 }}>
-            Coffee After Work is built around your professional world. We connect people within the same corporate circles — so you meet someone who gets your pace, your ambitions, and what life after 6pm actually looks like.
-          </p>
-        </div>
 
       </div>
     </FormPage>
