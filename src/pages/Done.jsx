@@ -28,7 +28,7 @@ export default function Done() {
       } catch (err) {
         setCountErr(true);
       }
-      
+
       // Random interval between 40 and 70 seconds
       const delay = Math.floor(Math.random() * (70000 - 40000) + 40000);
       timer = setTimeout(update, delay);
@@ -75,14 +75,14 @@ export default function Done() {
                   : <p style={{ fontSize: "clamp(56px, 8vw, 96px)", fontWeight: 800, color: C.red, lineHeight: 1, letterSpacing: "-.05em" }}>{animSpot.toLocaleString()}</p>
                 }
                 <p style={{ fontSize: "clamp(13px, 1vw, 16px)", color: C.muted, marginTop: 8, lineHeight: 1.5 }}>
-                  {countErr 
-                    ? "Couldn't load count. Please refresh." 
-                    : <>People joined. Your match <br /> may be here already.</>
+                  {countErr
+                    ? "Couldn't load count. Please refresh."
+                    : <>People joined.  <br />Your match  may be here already.</>
                   }
                 </p>
               </div>
               <div style={{ marginBottom: 4 }}>
-                <img src={heroPng} alt="coffee cup" style={{ width: "clamp(80px, 10vw, 140px)", height: "auto", display: "block" }} />
+                <img src={heroPng} alt="coffee cup" style={{ width: "clamp(80px, 10vw, 160px)", height: "auto", display: "block" }} />
               </div>
             </div>
           </div>
