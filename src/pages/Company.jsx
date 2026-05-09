@@ -90,13 +90,13 @@ export default function Company() {
           Where do you work?
         </h2>
         <p style={{ fontSize: "clamp(14px, 1.1vw, 16px)", color: C.muted, lineHeight: 1.6, marginBottom: 32, animation: "fadeUp .4s ease .12s both" }}>
-          This helps us connect you with people in similar professional circles who understand your lifestyle.
+          This helps us connect you with people in similar professional circles.
         </p>
 
         <div style={{ animation: "fadeUp .4s ease .16s both" }}>
           <FieldLabel>Company / Employer</FieldLabel>
           <div className={shakeEl === "company" ? "shake" : ""}>
-            <Field value={company} onChange={v => { setCompany(v); setCompErr(null); }} placeholder="e.g. Deloitte, Google, NHS…" onKeyDown={e => e.key === "Enter" && submit()} />
+            <Field value={company} onChange={v => { setCompany(v); setCompErr(null); }} placeholder="e.g. Deloitte, Google" onKeyDown={e => e.key === "Enter" && submit()} />
           </div>
           {compErr && <ErrorBox msg={compErr} />}
         </div>

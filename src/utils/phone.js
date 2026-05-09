@@ -256,7 +256,7 @@ export function validatePhone(dialCode, number) {
   if (!digits) return "Please enter your phone number.";
   const rule = PHONE_RULES[dialCode];
   if (rule) {
-    if (!rule.re.test(digits)) return rule.hint;
+    if (!rule.re.test(digits)) return "Enter a valid number.";
   } else {
     if (digits.length < 7)  return "Enter a valid phone number.";
     if (digits.length > 15) return "Number is too long.";

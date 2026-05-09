@@ -58,7 +58,7 @@ export default function Splash() {
         }}>
           <PrimaryBtn onClick={() => navigate("/signup")}>Join the waitlist</PrimaryBtn>
           <p style={{ fontSize: 12, color: C.muted, lineHeight: 1.45, marginTop: 12, textAlign: "center", fontStyle: "italic" }}>
-            Tea lovers are welcome too<br/>Coffee is just our excuse to connect 😉
+            Tea lovers are welcome too.<br/>Coffee is just our excuse to connect 😉
           </p>
         </div>
       </div>
