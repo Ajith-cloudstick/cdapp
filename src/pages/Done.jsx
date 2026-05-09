@@ -168,7 +168,7 @@ export default function Done() {
                 e.currentTarget.blur();
                 navigator.share?.({
                   title: "Coffee After Work",
-                  text: " \n Hey!  Check out \n\n 𝐂𝐨𝐟𝐟𝐞𝐞 𝐀𝐟𝐭𝐞𝐫 𝐖𝐨𝐫𝐤 ❤️\n\nA dating app built for working professionals tired of endless swiping and conversations that go nowhere.\n\nJoin the waitlist with me ✨",
+                  text: " \n Hey! Check out \n\n 𝐂𝐨𝐟𝐟𝐞𝐞 𝐀𝐟𝐭𝐞𝐫 𝐖𝐨𝐫𝐤 ❤️\n\nA dating app built for working professionals tired of endless swiping and conversations that go nowhere.\n\nJoin the waitlist with me ✨",
                   url: referralId ? `https://www.coffeeafterwork.com?ref=${referralId}` : 'https://www.coffeeafterwork.com'
                 });
               }}
