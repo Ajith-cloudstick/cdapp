@@ -3,7 +3,7 @@ import { C } from "../utils/tokens";
 import { Page, PrimaryBtn, BackBtn, RedLine } from "../components/ui";
 
 const STEPS = [
-  { n: "01", title: "Join the waitlist", desc: "Sign up and secure your spot on the list " },
+  { n: "01", title: "Join the waitlist", desc: "Sign up and secure your spot on the list. " },
   { n: "02", title: "Get early access", desc: "We'll notify you when you're in." },
   { n: "03", title: "Get matched", desc: "We'll connect you with someone special based on your preferences and values." },
   { n: "04", title: "Meet after work", desc: "Grab coffee. Make connection." },

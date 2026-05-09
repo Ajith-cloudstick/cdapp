@@ -72,7 +72,7 @@ export default function Phone() {
         </div>
 
         <h2 style={{ fontSize: "clamp(26px, 3.5vw, 48px)", fontWeight: 800, color: C.text, letterSpacing: "-.03em", lineHeight: 1.1, marginBottom: 8, animation: "fadeUp .4s ease .08s both" }}>
-          Your phone number.
+          Your phone number
         </h2>
         <p style={{ fontSize: "clamp(13px, 1.1vw, 16px)", color: C.muted, lineHeight: 1.65, marginBottom: 32, animation: "fadeUp .4s ease .12s both" }}>
           We'll notify you the moment the app is live.
@@ -192,108 +192,108 @@ function PhoneInput({ country, onCountryChange, value, onChange, focused, onFocu
               animation: "fadeIn .18s ease both",
             }}
           >
-          <div
-            role="dialog"
-            aria-modal="true"
-            onClick={e => e.stopPropagation()}
-            style={{
-              width: isMobile ? "100%" : 440,
-              maxWidth: isMobile ? "100%" : "calc(100vw - 24px)",
-              height: isMobile ? "auto" : 560,
-              minHeight: isMobile ? "50vh" : 360,
-              maxHeight: isMobile ? "85vh" : "min(560px, 80vh)",
-              display: "flex",
-              flexDirection: "column",
-              background: C.white,
-              borderRadius: isMobile ? "16px 16px 0 0" : 16,
-              boxShadow: "0 20px 60px rgba(0,0,0,.25)",
-              zIndex: 9999,
-              overflow: "hidden",
-              animation: isMobile ? "slideUp .22s ease both" : "fadeUp .18s ease both",
-              paddingBottom: isMobile ? "env(safe-area-inset-bottom, 0px)" : 0,
-            }}
-          >
-            {isMobile && (
-              <div style={{ display: "flex", justifyContent: "center", paddingTop: 8 }}>
-                <div style={{ width: 40, height: 4, borderRadius: 4, background: "rgba(0,0,0,.18)" }} />
+            <div
+              role="dialog"
+              aria-modal="true"
+              onClick={e => e.stopPropagation()}
+              style={{
+                width: isMobile ? "100%" : 440,
+                maxWidth: isMobile ? "100%" : "calc(100vw - 24px)",
+                height: isMobile ? "auto" : 560,
+                minHeight: isMobile ? "50vh" : 360,
+                maxHeight: isMobile ? "85vh" : "min(560px, 80vh)",
+                display: "flex",
+                flexDirection: "column",
+                background: C.white,
+                borderRadius: isMobile ? "16px 16px 0 0" : 16,
+                boxShadow: "0 20px 60px rgba(0,0,0,.25)",
+                zIndex: 9999,
+                overflow: "hidden",
+                animation: isMobile ? "slideUp .22s ease both" : "fadeUp .18s ease both",
+                paddingBottom: isMobile ? "env(safe-area-inset-bottom, 0px)" : 0,
+              }}
+            >
+              {isMobile && (
+                <div style={{ display: "flex", justifyContent: "center", paddingTop: 8 }}>
+                  <div style={{ width: 40, height: 4, borderRadius: 4, background: "rgba(0,0,0,.18)" }} />
+                </div>
+              )}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px 6px" }}>
+                <span style={{ fontSize: 16, fontWeight: 700, color: C.text, fontFamily: F, letterSpacing: "-.01em" }}>Select country</span>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  aria-label="Close"
+                  style={{ background: "transparent", border: "none", cursor: "pointer", padding: 6, color: C.muted, display: "flex" }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                    <line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" />
+                  </svg>
+                </button>
               </div>
-            )}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px 6px" }}>
-              <span style={{ fontSize: 16, fontWeight: 700, color: C.text, fontFamily: F, letterSpacing: "-.01em" }}>Select country</span>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                aria-label="Close"
-                style={{ background: "transparent", border: "none", cursor: "pointer", padding: 6, color: C.muted, display: "flex" }}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-                  <line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" />
-                </svg>
-              </button>
+              <div style={{ padding: 10, borderBottom: `1px solid ${C.border}` }}>
+                <input
+                  ref={searchRef}
+                  type="text"
+                  value={query}
+                  onChange={e => setQuery(e.target.value)}
+                  placeholder="Search country or code"
+                  style={{
+                    width: "100%",
+                    height: 38,
+                    border: `1px solid ${C.border}`,
+                    borderRadius: 8,
+                    padding: "0 12px",
+                    fontFamily: F,
+                    fontSize: 14,
+                    color: C.text,
+                    outline: "none",
+                    background: C.white,
+                    boxSizing: "border-box",
+                  }}
+                />
+              </div>
+              <div style={{ flex: 1, minHeight: 0, overflowY: "auto", WebkitOverflowScrolling: "touch" }}>
+                {filtered.length === 0 ? (
+                  <div style={{ padding: "16px 14px", fontSize: 13, color: C.muted, fontFamily: F }}>No matches</div>
+                ) : filtered.map(c => {
+                  const active = c.code === country.code;
+                  return (
+                    <button
+                      key={c.code}
+                      type="button"
+                      role="option"
+                      aria-selected={active}
+                      onClick={() => {
+                        onCountryChange(c);
+                        setOpen(false);
+                        setQuery("");
+                      }}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 10,
+                        width: "100%",
+                        padding: "10px 14px",
+                        background: active ? "rgba(154,0,2,.06)" : "transparent",
+                        border: "none",
+                        cursor: "pointer",
+                        fontFamily: F,
+                        fontSize: 14,
+                        color: C.text,
+                        textAlign: "left",
+                      }}
+                      onMouseEnter={e => { if (!active) e.currentTarget.style.background = "rgba(0,0,0,.04)"; }}
+                      onMouseLeave={e => { if (!active) e.currentTarget.style.background = "transparent"; }}
+                    >
+                      <span style={{ fontSize: 18, lineHeight: 1 }}>{c.flag}</span>
+                      <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.name}</span>
+                      <span style={{ color: C.muted, fontWeight: 600 }}>+{c.dial}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-            <div style={{ padding: 10, borderBottom: `1px solid ${C.border}` }}>
-              <input
-                ref={searchRef}
-                type="text"
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-                placeholder="Search country or code"
-                style={{
-                  width: "100%",
-                  height: 38,
-                  border: `1px solid ${C.border}`,
-                  borderRadius: 8,
-                  padding: "0 12px",
-                  fontFamily: F,
-                  fontSize: 14,
-                  color: C.text,
-                  outline: "none",
-                  background: C.white,
-                  boxSizing: "border-box",
-                }}
-              />
-            </div>
-            <div style={{ flex: 1, minHeight: 0, overflowY: "auto", WebkitOverflowScrolling: "touch" }}>
-              {filtered.length === 0 ? (
-                <div style={{ padding: "16px 14px", fontSize: 13, color: C.muted, fontFamily: F }}>No matches</div>
-              ) : filtered.map(c => {
-                const active = c.code === country.code;
-                return (
-                  <button
-                    key={c.code}
-                    type="button"
-                    role="option"
-                    aria-selected={active}
-                    onClick={() => {
-                      onCountryChange(c);
-                      setOpen(false);
-                      setQuery("");
-                    }}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 10,
-                      width: "100%",
-                      padding: "10px 14px",
-                      background: active ? "rgba(154,0,2,.06)" : "transparent",
-                      border: "none",
-                      cursor: "pointer",
-                      fontFamily: F,
-                      fontSize: 14,
-                      color: C.text,
-                      textAlign: "left",
-                    }}
-                    onMouseEnter={e => { if (!active) e.currentTarget.style.background = "rgba(0,0,0,.04)"; }}
-                    onMouseLeave={e => { if (!active) e.currentTarget.style.background = "transparent"; }}
-                  >
-                    <span style={{ fontSize: 18, lineHeight: 1 }}>{c.flag}</span>
-                    <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.name}</span>
-                    <span style={{ color: C.muted, fontWeight: 600 }}>+{c.dial}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
           </div>,
           document.body
         )}

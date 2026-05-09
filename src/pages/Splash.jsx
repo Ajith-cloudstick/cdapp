@@ -57,6 +57,9 @@ export default function Splash() {
           pointerEvents: ready ? "auto" : "none",
         }}>
           <PrimaryBtn onClick={() => navigate("/signup")}>Join the waitlist</PrimaryBtn>
+          <p style={{ fontSize: 12, color: C.muted, lineHeight: 1.45, marginTop: 12, textAlign: "center", fontStyle: "italic" }}>
+            Tea lovers are welcome too<br/>Coffee is just our excuse to connect 😉
+          </p>
         </div>
       </div>
 
@@ -87,6 +90,9 @@ Meet someone great, over  <span style={{ color: C.red }}>coffee</span>, after wo
           </p>
           <div style={{ opacity: ready ? 1 : 0, transform: ready ? "none" : "translateY(18px)", transition: "opacity .45s ease, transform .45s ease", pointerEvents: ready ? "auto" : "none", maxWidth: 320 }}>
             <PrimaryBtn onClick={() => navigate("/signup")}>Join the waitlist</PrimaryBtn>
+            <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.5, marginTop: 14, fontStyle: "italic" }}>
+              Tea lovers are welcome too<br/>coffee is just our excuse to connect 😉
+            </p>
           </div>
         </div>
 

@@ -125,7 +125,7 @@ export default function Done() {
 
         {/* Title */}
         <div style={{ marginBottom: "clamp(28px, 4vw, 48px)", marginTop: "clamp(50px, 4vw, 48px)", animation: "fadeUp .4s ease .05s both" }}>
-          <p style={{ fontSize: "clamp(30px, 5vw, 64px)", fontWeight: 800, color: C.text, letterSpacing: "-.03em", lineHeight: 1.1, marginBottom: 8 }}>You're on the list.</p>
+          <p style={{ fontSize: "clamp(30px, 5vw, 64px)", fontWeight: 800, color: C.text, letterSpacing: "-.03em", lineHeight: 1.1, marginBottom: 8 }}>You're on the list</p>
           <p style={{ fontSize: "clamp(14px, 1.2vw, 18px)", color: C.muted }}>Good things take time{name ? `, ${name}` : ""}.</p>
         </div>
 
@@ -166,7 +166,11 @@ export default function Done() {
               onClick={(e) => {
                 e.currentTarget.style.transform = "scale(1)";
                 e.currentTarget.blur();
-                navigator.share?.({ title: "Coffee After Work", url: referralId ? `https://www.coffeeafterwork.com?ref=${referralId}` : 'https://www.coffeeafterwork.com' });
+                navigator.share?.({
+                  title: "Coffee After Work",
+                  text: " \n Hey!  Check out \n\n 𝐂𝐨𝐟𝐟𝐞𝐞 𝐀𝐟𝐭𝐞𝐫 𝐖𝐨𝐫𝐤 ❤️\n\nA dating app built for working professionals tired of endless swiping and conversations that go nowhere.\n\nJoin the waitlist with me ✨",
+                  url: referralId ? `https://www.coffeeafterwork.com?ref=${referralId}` : 'https://www.coffeeafterwork.com'
+                });
               }}
               style={{ width: 44, height: 44, borderRadius: "50%", background: C.white, border: `1px solid ${C.border}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "transform .15s", flexShrink: 0, marginLeft: 16 }}
               onPointerEnter={e => { if (e.pointerType === "mouse") e.currentTarget.style.transform = "scale(1.1) rotate(-8deg)"; }}

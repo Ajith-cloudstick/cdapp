@@ -52,13 +52,13 @@ export default function Signup() {
     >
       <div style={{ maxWidth: 480, margin: "0 auto", padding: "clamp(24px, 4vw, 60px) 0 clamp(32px, 5vw, 80px)" }}>
         <h2 style={{ fontSize: "clamp(26px, 3.5vw, 48px)", fontWeight: 800, color: C.text, letterSpacing: "-.03em", lineHeight: 1.1, marginBottom: 8, animation: "fadeUp .4s ease both" }}>
-          Let's get you<br />on the list.
+          Let's get you<br />on the list
         </h2>
-        <p style={{ fontSize: "clamp(13px, 1.1vw, 16px)", color: C.muted, lineHeight: 1.65, marginBottom: 32, animation: "fadeUp .4s ease .06s both" }}>
+        {/* <p style={{ fontSize: "clamp(13px, 1.1vw, 16px)", color: C.muted, lineHeight: 1.65, marginBottom: 32, animation: "fadeUp .4s ease .06s both" }}>
           We keep it real — no fake emails, no bots.
-        </p>
+        </p> */}
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 20, animation: "fadeUp .4s ease .1s both" }}>
+        <div style={{marginTop: 28, display: "flex", flexDirection: "column", gap: 20, animation: "fadeUp .4s ease .1s both" }}>
           <div>
             <FieldLabel>First name</FieldLabel>
             <div className={shakeEl === "name" ? "shake" : ""}>
@@ -75,9 +75,9 @@ export default function Signup() {
           </div>
         </div>
 
-        <div style={{ marginTop: 28, padding: "14px 16px", background: C.card, borderRadius: 12, animation: "fadeUp .4s ease .16s both" }}>
+        {/* <div style={{ marginTop: 28, padding: "14px 16px", background: C.card, borderRadius: 12, animation: "fadeUp .4s ease .16s both" }}>
           <p style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.65 }}>🔒 Your info is never shared. We'll only contact you when the app is live.</p>
-        </div>
+        </div> */}
 
       </div>
     </FormPage>
