@@ -77,11 +77,11 @@ export default function Done() {
             style={{ background: C.card, borderRadius: 20, padding: "clamp(20px, 2.5vw, 32px)", display: "flex", justifyContent: "space-between", alignItems: "center", animation: "fadeUp .4s ease .18s both" }}
           >
             <div>
-              <Label>Share & Move Up</Label>
-              <p style={{ fontSize: "clamp(14px, 1.2vw, 17px)", color: C.text, lineHeight: 1.6, marginTop: 4 }}>Invite friends to move up the list together.</p>
+              <Label>Unlock Rewards</Label>
+              <p style={{ fontSize: "clamp(14px, 1.2vw, 17px)", color: C.text, lineHeight: 1.6, marginTop: 4 }}>Invite friends. Unlock exclusive goodies and rewards.</p>
             </div>
             <button
-              onClick={() => navigator.share?.({ title: "coffee after work", url: window.location.href })}
+              onClick={() => navigator.share?.({ title: "coffee after work", url: 'www.coffeeafterwork.com' })}
               style={{ width: 44, height: 44, borderRadius: "50%", background: C.white, border: `1px solid ${C.border}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "transform .15s", flexShrink: 0, marginLeft: 16 }}
               onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.1) rotate(-8deg)")}
               onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
@@ -100,7 +100,7 @@ export default function Done() {
               <Label>Updates</Label>
               <p style={{ fontSize: "clamp(14px, 1.2vw, 17px)", color: C.text, lineHeight: 1.6, marginTop: 4 }}>We're building something worth the wait.</p>
             </div>
-            <div   style={{ width: 44, height: 44, borderRadius: "50%", background: C.white, border: `1px solid ${C.border}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "transform .15s", flexShrink: 0, marginLeft: 16 }}>{I.arrow}</div>
+            <div style={{ width: 44, height: 44, borderRadius: "50%", background: C.white, border: `1px solid ${C.border}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "transform .15s", flexShrink: 0, marginLeft: 16 }}>{I.arrow}</div>
           </div>
 
         </div>
