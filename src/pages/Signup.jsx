@@ -35,6 +35,7 @@ export default function Signup() {
           <ProgressDots current={0} total={3} />
         </div>
       }
+      action={<PrimaryBtn onClick={submit} disabled={loading}>{loading ? "Checking…" : "Continue →"}</PrimaryBtn>}
     >
       <div style={{ maxWidth: 480, margin: "0 auto", padding: "clamp(24px, 4vw, 60px) 0 clamp(32px, 5vw, 80px)" }}>
         <h2 style={{ fontSize: "clamp(26px, 3.5vw, 48px)", fontWeight: 800, color: C.text, letterSpacing: "-.03em", lineHeight: 1.1, marginBottom: 8, animation: "fadeUp .4s ease both" }}>
@@ -65,9 +66,6 @@ export default function Signup() {
           <p style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.65 }}>🔒 Your info is never shared. We'll only contact you when your spot opens.</p>
         </div>
 
-        <div style={{ marginTop: 24 }}>
-          <PrimaryBtn onClick={submit} disabled={loading}>{loading ? "Checking…" : "Continue →"}</PrimaryBtn>
-        </div>
       </div>
     </FormPage>
   );

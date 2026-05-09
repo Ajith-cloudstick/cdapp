@@ -29,6 +29,12 @@ export default function Phone() {
           <ProgressDots current={1} total={3} />
         </div>
       }
+      action={
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <PrimaryBtn onClick={submit}>Continue →</PrimaryBtn>
+          <button onClick={() => navigate("/company")} style={{ background: "none", border: "none", color: C.muted, fontFamily: F, fontSize: 13, cursor: "pointer", padding: "6px 0", textAlign: "center" }}>Skip for now</button>
+        </div>
+      }
     >
       <div style={{ maxWidth: 480, margin: "0 auto", padding: "clamp(24px, 4vw, 60px) 0 clamp(32px, 5vw, 80px)" }}>
         <div style={{ width: 52, height: 52, borderRadius: "50%", background: C.card, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24, animation: "popIn .45s cubic-bezier(.34,1.56,.64,1) both" }}>
@@ -54,10 +60,6 @@ export default function Phone() {
           <p style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.65 }}>📱 We'll text you when it's your turn. That's it.</p>
         </div>
 
-        <div style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 10 }}>
-          <PrimaryBtn onClick={submit}>Continue →</PrimaryBtn>
-          <button onClick={() => navigate("/company")} style={{ background: "none", border: "none", color: C.muted, fontFamily: F, fontSize: 13, cursor: "pointer", padding: "6px 0", textAlign: "center" }}>Skip for now</button>
-        </div>
       </div>
     </FormPage>
   );

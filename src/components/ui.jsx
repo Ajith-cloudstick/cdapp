@@ -26,19 +26,32 @@ export function Page({ header, children, action, animDir = "forward", animKey })
           {children}
         </div>
       </div>
-      {action && (
-        <div style={{ flexShrink: 0, background: C.bg, padding: `12px ${PX}`, paddingBottom: `max(24px, env(safe-area-inset-bottom, 24px))` }}>
-          <div style={{ maxWidth: MAX, margin: "0 auto" }}>
-            <div style={{ maxWidth: 480, margin: "0 auto" }}>{action}</div>
-          </div>
-        </div>
-      )}
+      {action && <ActionBar>{action}</ActionBar>}
+    </div>
+  );
+}
+
+/* Shared sticky bottom action bar */
+function ActionBar({ children }) {
+  return (
+    <div style={{
+      position: "sticky",
+      bottom: 0,
+      flexShrink: 0,
+      background: C.bg,
+      borderTop: `1px solid ${C.border}`,
+      padding: `12px ${PX}`,
+      paddingBottom: `max(20px, env(safe-area-inset-bottom, 20px))`,
+    }}>
+      <div style={{ maxWidth: MAX, margin: "0 auto" }}>
+        <div style={{ maxWidth: 480, margin: "0 auto" }}>{children}</div>
+      </div>
     </div>
   );
 }
 
 /* Split layout for form pages: left brand panel + right form on desktop */
-export function FormPage({ children, header }) {
+export function FormPage({ children, header, action }) {
   return (
     <div className="form-split" style={{ background: C.bg, fontFamily: F }}>
       {/* Left brand panel — hidden on mobile via CSS */}
@@ -53,6 +66,7 @@ export function FormPage({ children, header }) {
         <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", padding: `0 ${PX}` }}>
           {children}
         </div>
+        {action && <ActionBar>{action}</ActionBar>}
       </div>
     </div>
   );

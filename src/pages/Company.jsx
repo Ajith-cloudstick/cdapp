@@ -29,6 +29,7 @@ export default function Company() {
           <ProgressDots current={2} total={3} />
         </div>
       }
+      action={<PrimaryBtn onClick={submit}>Reserve my spot →</PrimaryBtn>}
     >
       <div style={{ maxWidth: 480, margin: "0 auto", padding: "clamp(24px, 4vw, 60px) 0 clamp(32px, 5vw, 80px)" }}>
         <div style={{ width: 52, height: 52, borderRadius: "50%", background: C.card, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24, animation: "popIn .45s cubic-bezier(.34,1.56,.64,1) both" }}>
@@ -56,9 +57,6 @@ export default function Company() {
           </p>
         </div>
 
-        <div style={{ marginTop: 32 }}>
-          <PrimaryBtn onClick={submit}>Reserve my spot →</PrimaryBtn>
-        </div>
       </div>
     </FormPage>
   );
