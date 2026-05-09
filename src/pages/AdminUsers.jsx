@@ -24,6 +24,7 @@ export default function AdminUsers() {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [err, setErr] = useState("");
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -44,6 +45,53 @@ export default function AdminUsers() {
   }, []);
 
   useEffect(() => { load(page); }, [load, page]);
+
+  const exportExcel = async () => {
+    setExporting(true);
+    setErr("");
+    try {
+      const data = await listPromo();
+      const all = Array.isArray(data?.users) ? data.users : [];
+
+      const headers = [
+        "ID", "Name", "Email", "Company", "Phone",
+        "Referral ID", "Referrals", "Created",
+      ];
+      const rows = all.map((u) => [
+        u.id,
+        u.name || "",
+        u.email || "",
+        u.company || "",
+        u.phone_number || "",
+        u.referral_id || "",
+        u.referral_count ?? 0,
+        u.created_at || "",
+      ]);
+
+      const escape = (v) => {
+        const s = String(v ?? "");
+        return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+      };
+      const csv = [headers, ...rows]
+        .map((r) => r.map(escape).join(","))
+        .join("\r\n");
+
+      const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const ts = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+      a.href = url;
+      a.download = `users-${ts}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      setErr(e.message || "Failed to export users");
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const logout = () => {
     sessionStorage.removeItem("caw_admin_auth");
@@ -82,6 +130,9 @@ export default function AdminUsers() {
           <div style={{ display: "flex", gap: 8 }}>
             <button onClick={() => load(page)} style={btnGhost} disabled={loading}>
               Refresh
+            </button>
+            <button onClick={exportExcel} style={btnGhost} disabled={exporting || loading}>
+              {exporting ? "Exporting…" : "Export Excel"}
             </button>
             <button onClick={logout} style={btnGhost}>Logout</button>
           </div>

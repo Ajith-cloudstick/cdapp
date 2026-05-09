@@ -38,8 +38,11 @@ export async function submitPromo({ name, email, company, phone_number, referred
   return api.post("/add", body);
 }
 
-export async function listPromo({ page = 1, page_size = 50 } = {}) {
-  return api.get("/list", { params: { page, page_size } });
+export async function listPromo({ page, page_size } = {}) {
+  const params = {};
+  if (page !== undefined) params.page = page;
+  if (page_size !== undefined) params.page_size = page_size;
+  return api.get("/list", { params });
 }
 
 export async function getCount() {

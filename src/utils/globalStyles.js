@@ -72,6 +72,10 @@ export function injectGlobalStyles() {
       70%  { transform:scale(1.25); opacity:1; }
       100% { transform:scale(1); opacity:1; }
     }
+    @keyframes slideUp {
+      0%   { transform: translateY(100%); }
+      100% { transform: translateY(0); }
+    }
 
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; }
@@ -161,7 +165,12 @@ export function injectGlobalStyles() {
       min-height: 100svh;
     }
     .form-split-left  { display: none; }
-    .form-split-right { flex: 1; }
+    .form-split-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100svh;
+    }
     @media (min-width: 1024px) {
       .form-split {
         flex-direction: row;
