@@ -67,21 +67,21 @@ export default function Done() {
 
           {/* Spot — spans full width on desktop */}
           <div className="done-spot card-lift" style={{ background: C.card, borderRadius: 20, padding: "clamp(20px, 3vw, 36px)", animation: "fadeUp .4s ease .12s both" }}>
-            <Label>Joined the Waitlist</Label>
+
             <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
               <div>
                 {spot == null && !countErr
                   ? <div style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, color: C.muted, lineHeight: 1, letterSpacing: "-.03em", paddingBottom: 8 }}>—</div>
                   : <p style={{ fontSize: "clamp(56px, 8vw, 96px)", fontWeight: 800, color: C.red, lineHeight: 1, letterSpacing: "-.05em" }}>{animSpot.toLocaleString()}</p>
                 }
-                <p style={{ fontSize: "clamp(13px, 1vw, 16px)", color: C.muted, marginTop: 8, lineHeight: 1.5 }}>
+                <p style={{ fontSize: "clamp(13px, 1vw, 16px)", color: C.text, marginTop: 8, lineHeight: 1.5 }}>
                   {countErr
                     ? "Couldn't load count. Please refresh."
                     : <>People joined.  <br />Your match  may be here already.</>
                   }
                 </p>
               </div>
-              <div style={{ marginBottom: 4 }}>
+              <div style={{ marginBottom: 20 }}>
                 <img src={heroPng} alt="coffee cup" style={{ width: "clamp(80px, 10vw, 160px)", height: "auto", display: "block" }} />
               </div>
             </div>
