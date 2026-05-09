@@ -54,7 +54,7 @@ export default function Done() {
 
           {/* Spot — spans full width on desktop */}
           <div className="done-spot card-lift" style={{ background: C.card, borderRadius: 20, padding: "clamp(20px, 3vw, 36px)", animation: "fadeUp .4s ease .12s both" }}>
-            <Label>Your Spot</Label>
+            <Label>Joined the Waitlist</Label>
             <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
               <div>
                 {spot == null && !countErr
@@ -62,7 +62,7 @@ export default function Done() {
                   : <p style={{ fontSize: "clamp(56px, 8vw, 96px)", fontWeight: 800, color: C.red, lineHeight: 1, letterSpacing: "-.05em" }}>{animSpot.toLocaleString()}</p>
                 }
                 <p style={{ fontSize: "clamp(13px, 1vw, 16px)", color: C.muted, marginTop: 8 }}>
-                  {countErr ? "Couldn't load count — check back soon." : "people on the waitlist"}
+                  {countErr ? "Couldn't load count — check back soon." : "People showed interest — your perfect match may be here already."}
                 </p>
               </div>
               <div style={{ marginBottom: 4 }}>
@@ -81,7 +81,7 @@ export default function Done() {
               <p style={{ fontSize: "clamp(14px, 1.2vw, 17px)", color: C.text, lineHeight: 1.6, marginTop: 4 }}>Invite friends. Unlock exclusive goodies and rewards.</p>
             </div>
             <button
-              onClick={() => navigator.share?.({ title: "coffee after work", url: 'www.coffeeafterwork.com' })}
+              onClick={() => navigator.share?.({ title: "Coffee After Work", url: 'https://www.coffeeafterwork.com' })}
               style={{ width: 44, height: 44, borderRadius: "50%", background: C.white, border: `1px solid ${C.border}`, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "transform .15s", flexShrink: 0, marginLeft: 16 }}
               onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.1) rotate(-8deg)")}
               onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
