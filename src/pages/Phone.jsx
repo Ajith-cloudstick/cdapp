@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { C, F } from "../utils/tokens";
 import { FormPage, PrimaryBtn, BackBtn, FieldLabel, ErrorBox, ProgressDots } from "../components/ui";
@@ -6,16 +6,33 @@ import { useApp } from "../context/AppContext";
 import { COUNTRIES, cleanPhone, validatePhone } from "../utils/phone";
 import { I } from "../components/icons";
 
-const DEFAULT_COUNTRY = COUNTRIES[0]; // India
+const INDIA = COUNTRIES.find(c => c.code === "IN");
 
 export default function Phone() {
   const navigate = useNavigate();
   const { phone, setPhone, setDialCode } = useApp();
 
-  const [country, setCountry] = useState(DEFAULT_COUNTRY);
+  const [country, setCountry] = useState(INDIA);
   const [phoneErr, setPhoneErr] = useState(null);
   const [shakeEl, setShakeEl] = useState(null);
   const [focused, setFocused] = useState(false);
+
+  // Detect user's country via IP geolocation and auto-select dial code
+  useEffect(() => {
+    let cancelled = false;
+    fetch("https://ipwho.is/")
+      .then(r => r.json())
+      .then(data => {
+        if (cancelled || !data?.country_code) return;
+        const match = COUNTRIES.find(c => c.code === data.country_code);
+        if (match) {
+          setCountry(match);
+          setDialCode(match.dial);
+        }
+      })
+      .catch(() => { /* keep India default */ });
+    return () => { cancelled = true; };
+  }, [setDialCode]);
 
   function shake(el) { setShakeEl(el); setTimeout(() => setShakeEl(null), 380); }
 
@@ -140,7 +157,7 @@ function PhoneInput({ country, onCountryChange, value, onChange, focused, onFocu
         onFocus={onFocus}
         onBlur={onBlur}
         onKeyDown={e => e.key === "Enter" && onSubmit()}
-        placeholder="98765 43210"
+        placeholder={country.placeholder}
         style={{
           flex: 1,
           border: "none",
