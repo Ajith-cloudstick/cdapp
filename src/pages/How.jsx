@@ -3,10 +3,10 @@ import { C } from "../utils/tokens";
 import { Page, PrimaryBtn, BackBtn, RedLine } from "../components/ui";
 
 const STEPS = [
-  { n: "01", title: "Join the waitlist",  desc: "Sign up and secure your spot on the list in under a minute." },
-  { n: "02", title: "Get early access",   desc: "We'll notify you the moment your spot opens up." },
-  { n: "03", title: "Get matched",        desc: "We'll personally introduce you to someone great." },
-  { n: "04", title: "Meet after work",    desc: "Grab coffee. Make a real, face-to-face connection." },
+  { n: "01", title: "Join the waitlist", desc: "Sign up and secure your spot on the list " },
+  { n: "02", title: "Get early access", desc: "We'll notify you when you're in." },
+  { n: "03", title: "Get matched", desc: "We'll connect you with someone special based on your preferences and values." },
+  { n: "04", title: "Meet after work", desc: "Grab coffee. Make connection." },
 ];
 
 export default function How() {
@@ -23,9 +23,7 @@ export default function How() {
           How it works
         </h2>
         <RedLine />
-        <p style={{ fontSize: "clamp(14px, 1.2vw, 18px)", color: "rgba(27,23,23,.65)", lineHeight: 1.75, marginBottom: "clamp(32px, 5vw, 64px)", maxWidth: 560, animation: "fadeUp .4s ease .06s both" }}>
-          Four simple steps from sign-up to your first coffee.
-        </p>
+
 
         {/* Step grid — 1 col mobile, 2 col desktop */}
         <div className="step-grid">
