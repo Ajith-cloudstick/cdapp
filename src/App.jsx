@@ -17,8 +17,7 @@ export default function App() {
   return (
     <AppProvider>
       <BrowserRouter>
-        <div className="app-shell">
-          <Routes>
+        <Routes>
             <Route path="/"        element={<Splash />} />
             <Route path="/why"     element={<Why />} />
             <Route path="/how"     element={<How />} />
@@ -29,7 +28,6 @@ export default function App() {
             <Route path="/done"    element={<Done />} />
             <Route path="*"        element={<Navigate to="/" replace />} />
           </Routes>
-        </div>
       </BrowserRouter>
     </AppProvider>
   );

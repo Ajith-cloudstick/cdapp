@@ -11,9 +11,9 @@ export function injectGlobalStyles() {
   s.id = "caw-global";
   s.textContent = `
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { -webkit-text-size-adjust: 100%; }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
     body {
-      background: #e8ddc8;
+      background: #fbfaf4;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
@@ -117,19 +117,71 @@ export function injectGlobalStyles() {
 
     .shake { animation:shake .34s cubic-bezier(.36,.07,.19,.97) both; }
 
-    /* Centralized app shell */
-    .app-shell {
-      max-width: 480px;
-      margin: 0 auto;
-      min-height: 100svh;
-      background: #fbfaf4;
-      position: relative;
+    /* ── Responsive grids ──────────────────────────────────────── */
+    .feat-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
     }
-    @media (min-width: 520px) {
-      body { display: flex; align-items: flex-start; justify-content: center; min-height: 100svh; }
-      .app-shell {
-        min-height: 100svh;
-        box-shadow: 0 0 0 1px rgba(27,23,23,.06), 0 24px 64px rgba(27,23,23,.12);
+    @media (min-width: 768px) {
+      .feat-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    }
+
+    .step-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    @media (min-width: 768px) {
+      .step-grid { grid-template-columns: repeat(2, 1fr); gap: 0 48px; }
+    }
+
+    .done-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 768px) {
+      .done-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      .done-spot { grid-column: 1 / -1; }
+    }
+
+    /* ── Splash split on desktop ───────────────────────────────── */
+    .splash-mobile  { display: block; }
+    .splash-desktop { display: none; }
+    @media (min-width: 1024px) {
+      .splash-mobile  { display: none; }
+      .splash-desktop { display: grid; }
+    }
+
+    /* ── Form split layout ─────────────────────────────────────── */
+    .form-split {
+      display: flex;
+      flex-direction: column;
+      min-height: 100svh;
+    }
+    .form-split-left  { display: none; }
+    .form-split-right { flex: 1; }
+    @media (min-width: 1024px) {
+      .form-split {
+        flex-direction: row;
+      }
+      .form-split-left {
+        display: flex;
+        width: 42%;
+        flex-shrink: 0;
+        position: sticky;
+        top: 0;
+        height: 100svh;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #F0E7C8;
+      }
+      .form-split-right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
       }
     }
   `;

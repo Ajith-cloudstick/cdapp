@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { C, F } from "../utils/tokens";
-import { Page, PrimaryBtn, BackBtn, Field, FieldLabel, ErrorBox, ProgressDots } from "../components/ui";
+import { FormPage, PrimaryBtn, BackBtn, Field, FieldLabel, ErrorBox, ProgressDots } from "../components/ui";
 import { useApp } from "../context/AppContext";
 import { validateEmail } from "../utils/email";
 
@@ -14,7 +14,7 @@ export default function Signup() {
   const [loading,  setLoading]  = useState(false);
   const [shakeEl,  setShakeEl]  = useState(null);
 
-  function shake(el) { setShakeEl(el); setTimeout(()=>setShakeEl(null), 380); }
+  function shake(el) { setShakeEl(el); setTimeout(() => setShakeEl(null), 380); }
 
   async function submit() {
     setNameErr(null); setEmailErr(null);
@@ -28,44 +28,47 @@ export default function Signup() {
   }
 
   return (
-    <Page
+    <FormPage
       header={
-        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", paddingBottom:20 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: 20 }}>
           <BackBtn onClick={() => navigate(-1)} />
           <ProgressDots current={0} total={3} />
         </div>
       }
-      action={<PrimaryBtn onClick={submit} disabled={loading}>{loading?"Checking…":"Continue →"}</PrimaryBtn>}
     >
-      <div style={{ padding:"12px 0 24px" }}>
-        <h2 style={{ fontSize:24, fontWeight:800, color:C.text, letterSpacing:"-.025em", lineHeight:1.2, marginBottom:6, animation:"fadeUp .4s ease both" }}>
-          Let's get you<br/>on the list.
+      <div style={{ maxWidth: 480, margin: "0 auto", padding: "clamp(24px, 4vw, 60px) 0 clamp(32px, 5vw, 80px)" }}>
+        <h2 style={{ fontSize: "clamp(26px, 3.5vw, 48px)", fontWeight: 800, color: C.text, letterSpacing: "-.03em", lineHeight: 1.1, marginBottom: 8, animation: "fadeUp .4s ease both" }}>
+          Let's get you<br />on the list.
         </h2>
-        <p style={{ fontSize:13.5, color:C.muted, lineHeight:1.65, marginBottom:28, animation:"fadeUp .4s ease .06s both" }}>
+        <p style={{ fontSize: "clamp(13px, 1.1vw, 16px)", color: C.muted, lineHeight: 1.65, marginBottom: 32, animation: "fadeUp .4s ease .06s both" }}>
           We keep it real — no fake emails, no bots.
         </p>
 
-        <div style={{ display:"flex", flexDirection:"column", gap:18, animation:"fadeUp .4s ease .1s both" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 20, animation: "fadeUp .4s ease .1s both" }}>
           <div>
             <FieldLabel>First name</FieldLabel>
-            <div className={shakeEl==="name"?"shake":""}>
-              <Field value={name} onChange={v=>{setName(v);setNameErr(null);}} placeholder="Your first name" />
+            <div className={shakeEl === "name" ? "shake" : ""}>
+              <Field value={name} onChange={v => { setName(v); setNameErr(null); }} placeholder="Your first name" />
             </div>
             {nameErr && <ErrorBox msg={nameErr} />}
           </div>
           <div>
             <FieldLabel>Email address</FieldLabel>
-            <div className={shakeEl==="email"?"shake":""}>
-              <Field value={email} onChange={v=>{setEmail(v);setEmailErr(null);}} placeholder="your@email.com" type="email" onKeyDown={e=>e.key==="Enter"&&submit()} />
+            <div className={shakeEl === "email" ? "shake" : ""}>
+              <Field value={email} onChange={v => { setEmail(v); setEmailErr(null); }} placeholder="your@email.com" type="email" onKeyDown={e => e.key === "Enter" && submit()} />
             </div>
-            {emailErr && <ErrorBox msg={emailErr.msg} fix={emailErr.fix} onFix={()=>{setEmail(emailErr.fix);setEmailErr(null);}} />}
+            {emailErr && <ErrorBox msg={emailErr.msg} fix={emailErr.fix} onFix={() => { setEmail(emailErr.fix); setEmailErr(null); }} />}
           </div>
         </div>
 
-        <div style={{ marginTop:24, padding:"12px 14px", background:C.card, borderRadius:10, animation:"fadeUp .4s ease .16s both" }}>
-          <p style={{ fontSize:12.5, color:C.muted, lineHeight:1.6 }}>🔒 Your info is never shared. We'll only contact you when your spot opens.</p>
+        <div style={{ marginTop: 28, padding: "14px 16px", background: C.card, borderRadius: 12, animation: "fadeUp .4s ease .16s both" }}>
+          <p style={{ fontSize: 12.5, color: C.muted, lineHeight: 1.65 }}>🔒 Your info is never shared. We'll only contact you when your spot opens.</p>
+        </div>
+
+        <div style={{ marginTop: 24 }}>
+          <PrimaryBtn onClick={submit} disabled={loading}>{loading ? "Checking…" : "Continue →"}</PrimaryBtn>
         </div>
       </div>
-    </Page>
+    </FormPage>
   );
 }

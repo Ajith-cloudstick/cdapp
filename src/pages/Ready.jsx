@@ -4,39 +4,53 @@ import { Page, PrimaryBtn, BackBtn } from "../components/ui";
 import { Heart } from "../components/Heart";
 import { I } from "../components/icons";
 
+const PLEDGES = [
+  "I'm genuinely looking to meet someone",
+  "I'll show up if we're matched",
+  "I want something real, not just a swipe",
+];
+
 export default function Ready() {
   const navigate = useNavigate();
 
   return (
     <Page
-      header={<div style={{ paddingBottom:16 }}><BackBtn onClick={() => navigate(-1)} /></div>}
+      header={<div style={{ paddingBottom: 16 }}><BackBtn onClick={() => navigate(-1)} /></div>}
       action={
-        <div style={{ display:"flex", flexDirection:"column", gap:4 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           <PrimaryBtn onClick={() => navigate("/signup")}>Continue →</PrimaryBtn>
-          <button onClick={() => navigate(-1)} style={{ background:"none", border:"none", color:C.muted, fontFamily:F, fontSize:14, fontWeight:500, cursor:"pointer", padding:"10px 0", textAlign:"center", letterSpacing:".01em" }}>Cancel</button>
+          <button onClick={() => navigate(-1)} style={{ background: "none", border: "none", color: C.muted, fontFamily: F, fontSize: 14, fontWeight: 500, cursor: "pointer", padding: "10px 0", textAlign: "center" }}>Cancel</button>
         </div>
       }
     >
-      <div style={{ padding:"16px 0 24px" }}>
-        <div style={{ marginBottom:24, animation:"fadeUp .4s ease both" }}>
-          <Heart sz={4} gap={1} />
+      {/* Centered content with max-width for comfortable reading on all screens */}
+      <div style={{ maxWidth: 640, margin: "0 auto", padding: "clamp(24px, 4vw, 72px) 0 clamp(32px, 5vw, 80px)" }}>
+
+        <div style={{ marginBottom: 28, animation: "fadeUp .4s ease both" }}>
+          <Heart sz={5} gap={1.5} />
         </div>
-        <h2 style={{ fontSize:24, fontWeight:800, color:C.text, letterSpacing:"-.025em", lineHeight:1.2, marginBottom:6, animation:"fadeUp .4s ease .1s both" }}>
-          Ready to meet<br/>someone great?
+
+        <h2 style={{ fontSize: "clamp(28px, 4vw, 56px)", fontWeight: 800, color: C.text, letterSpacing: "-.03em", lineHeight: 1.1, marginBottom: 12, animation: "fadeUp .4s ease .08s both" }}>
+          Ready to meet<br />someone great?
         </h2>
-        <p style={{ fontSize:13.5, color:C.muted, lineHeight:1.7, marginBottom:28, animation:"fadeUp .4s ease .15s both" }}>
-          We only welcome real people with genuine intentions.
+        <p style={{ fontSize: "clamp(14px, 1.2vw, 17px)", color: C.muted, lineHeight: 1.75, marginBottom: 40, animation: "fadeUp .4s ease .14s both" }}>
+          We only welcome real people with genuine intentions. A few things we ask of everyone on the list.
         </p>
-        <div style={{ animation:"fadeUp .4s ease .2s both" }}>
-          {["I'm genuinely looking to meet someone","I'll show up if we're matched","I want something real, not just a swipe"].map((t,i,arr)=>(
-            <div key={i} style={{ display:"flex", alignItems:"center", gap:14, padding:"14px 0", borderBottom:i<arr.length-1?`1px solid ${C.border}`:"none" }}>
-              <div style={{ width:24, height:24, borderRadius:"50%", background:"rgba(154,0,2,.08)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+
+        <div style={{ animation: "fadeUp .4s ease .2s both" }}>
+          {PLEDGES.map((t, i, arr) => (
+            <div
+              key={i}
+              style={{ display: "flex", alignItems: "center", gap: 16, padding: "clamp(14px, 1.5vw, 20px) 0", borderBottom: i < arr.length - 1 ? `1px solid ${C.border}` : "none" }}
+            >
+              <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(154,0,2,.08)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 {I.check}
               </div>
-              <p style={{ fontSize:14, color:C.text, fontWeight:500 }}>{t}</p>
+              <p style={{ fontSize: "clamp(14px, 1.2vw, 17px)", color: C.text, fontWeight: 500 }}>{t}</p>
             </div>
           ))}
         </div>
+
       </div>
     </Page>
   );
